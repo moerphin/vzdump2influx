@@ -1,14 +1,14 @@
 # vzdump2influx
-##Proxmox backup data to InfluxDB##
+## Proxmox backup data to InfluxDB ##
 
 Just a simple script to wtite some stats to InfluxDB about your backup. Based on vzdump hook method.
 Please don't hesitate, and contact me if you found a bug, or you have any idea for this script.
 
-###Requirements:###
+### Requirements: ###
 - Proxmox :)
 - curl
 
-###Install:###
+### Install: ###
 1. On Proxmox host install curl.
   sudo apt-get install curl
   
@@ -18,12 +18,12 @@ Please don't hesitate, and contact me if you found a bug, or you have any idea f
   
 3. Customize!
   Fill the neccessary datas in the script.
-  - <DBUSER> : username for DB
-  - <DBPASS> : password for DB
-  - <DBHOST> : hostname or ip for your DB
-  - <DBPORT> : HTTP API port (default: 8086)
-  - <DBNAME> : name of your DB
-  - <LOCATION_CODE> : put your location here. I have multiple DCs, so I have different location for each.
+  - `<DBUSER>` : username for DB
+  - `<DBPASS>` : password for DB
+  - `<DBHOST>` : hostname or ip for your DB
+  - `<DBPORT>` : HTTP API port (default: 8086)
+  - `<DBNAME>` : name of your DB
+  - `<LOCATION_CODE>` : put your location here. I have multiple DCs, so I have different location for each.
 
 4. Add the hook to the backup job.
   Edit the /etc/pve/vzdump.cron file, and add this to the end of line for every job you want to monitor: "--script /location/of/the/script.sh"
