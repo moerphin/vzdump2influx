@@ -2,6 +2,7 @@
 ## Proxmox backup data to InfluxDB ##
 
 Just a simple script to wtite some stats to InfluxDB about your backup. Based on vzdump hook method.
+
 Please don't hesitate, and contact me if you found a bug, or you have any idea for this script.
 
 ### Requirements: ###
@@ -10,10 +11,13 @@ Please don't hesitate, and contact me if you found a bug, or you have any idea f
 
 ### Install: ###
 1. On Proxmox host install curl.
-  sudo apt-get install curl
+
+`sudo apt-get install curl`
   
 2. Put the script somewhere.
+
   E.g. /usr/local/bin/vzdump2influx.sh
+  
   Be sure your script is executable. (Check the permissions on file.)
   
 3. Customize!
