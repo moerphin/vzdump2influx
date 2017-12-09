@@ -20,3 +20,4 @@ if [ "$1" == "backup-abort" ]; then
     DURATION=$((`date +%s`-`sed '1q;d' /tmp/backup-info`))
     /usr/bin/curl -s -i -XPOST -u $DBUSER:$DBPASS "http://$DBHOST:$DBPORT/write?db=$DBNAME" --data-binary  "backup_px,host=$HOSTNAME,location=$LOCATIONCODE success=0,duration=$DURATION,size=0" > /dev/null
     rm /tmp/backup-info
+fi
