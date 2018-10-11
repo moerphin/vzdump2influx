@@ -19,6 +19,9 @@ if [ "$1" == "log-end" ]; then
         rm /tmp/backup-info
     else
         SPEED=$((`cat ${LOGFILE} | grep -o -P "(?<=seconds \().*(?= MB/s)"`))
+        if [ ! "$SPEED" -gt 0 ]; then
+            SPEED=$((`cat ${LOGFILE} | grep -o -P "(?<=.iB, ).*(?=.iB\/s)"`))
+        fi
         DURATION=$((`cat ${LOGFILE} | grep -o -P "(?<=MB in ).*(?= seconds)"`))
         /usr/bin/curl -s -i -XPOST -u $DBUSER:$DBPASS "http://$DBHOST:$DBPORT/write?db=$DBNAME" --data-binary  "backup_px,host=$HOSTNAME,location=$LOCATIONCODE success=1,duration=$DURATION,speed=$SPEED,size=`stat -c%s $TARFILE`" > /dev/null
         rm /tmp/backup-info
