@@ -6,7 +6,7 @@ Just a simple script to wtite some stats to InfluxDB about your backup. Based on
 Please don't hesitate, and contact me if you found a bug, or you have any idea for this script.
 
 ### Updates: ###
-11=10/18: Quick fix for LXC transfer speeds
+11/10/18: Quick fix for LXC transfer speeds
 
 ### Requirements: ###
 - Proxmox :)
