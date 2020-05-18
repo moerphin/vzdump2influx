@@ -28,6 +28,7 @@ Please don't hesitate, and contact me if you found a bug, or you have any idea f
   Fill the neccessary datas in the script.
   - `<DBUSER>` : username for DB
   - `<DBPASS>` : password for DB
+  - `<DBPROTO>` : protocol for communication with DB server. HTTP or HTTPS
   - `<DBHOST>` : hostname or ip for your DB
   - `<DBPORT>` : HTTP API port (default: 8086)
   - `<DBNAME>` : name of your DB
