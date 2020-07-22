@@ -7,6 +7,7 @@ DBHOST=<DBHOST>
 DBPORT=<DBPORT>
 DBNAME=<DBNAME>
 LOCATIONCODE=<LOCATION_CODE>
+DEBUG=false #Debug mode, copy all logs to /tmp/timestamp
 
 if [ "$1" == "backup-start" ]; then
     echo `date +%s` > /tmp/backup-info
@@ -14,6 +15,9 @@ if [ "$1" == "backup-start" ]; then
 fi
 
 if [ "$1" == "log-end" ]; then
+    if [ "$DEBUG" = true ]; then
+        cp ${LOGFILE} /tmp/`date +%s`
+    fi
     if [ `cat ${LOGFILE} | grep ERROR | wc -l` -gt 0 ]; then
         DURATION=$((`date +%s`-`sed '1q;d' /tmp/backup-info`))
         /usr/bin/curl -s -i -XPOST -u $DBUSER:$DBPASS "$DBPROTO://$DBHOST:$DBPORT/write?db=$DBNAME" --data-binary  "proxmox,host=$HOSTNAME,location=$LOCATIONCODE success=0,duration=$DURATION,speed=0,size=0" > /tmp/tst
