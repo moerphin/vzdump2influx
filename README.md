@@ -33,6 +33,7 @@ Please don't hesitate, and contact me if you found a bug, or you have any idea f
   - `<DBPORT>` : HTTP API port (default: 8086)
   - `<DBNAME>` : name of your DB
   - `<LOCATION_CODE>` : put your location here. I have multiple DCs, so I have different location for each.
+  - `<DEBUG>` : true or false. If the value is true, the script copies all logs to /tmp/timestamp (and does not delete it)
 
 4. Add the hook to the backup job.
     Edit the /etc/vzdump.conf file, and add this line: "script: /location/of/the/script.sh"
