@@ -23,9 +23,9 @@ if [ "$1" == "log-end" ]; then
         /usr/bin/curl -s -i -XPOST -u $DBUSER:$DBPASS "$DBPROTO://$DBHOST:$DBPORT/write?db=$DBNAME" --data-binary  "proxmox,host=$HOSTNAME,location=$LOCATIONCODE success=0,duration=$DURATION,speed=0,size=0" > /tmp/tst
         rm /tmp/backup-info
     else
-        SPEED=$((`cat ${LOGFILE} | grep -o -P "(?<=seconds \().*(?= MB\/s)"`))
+        SPEED=$((`cat ${LOGFILE} | grep -o -P "(?<=seconds \().*(?= MB\/s| MiB\/s)"`))
         if [ ! "$SPEED" -gt 0 ]; then
-            SPEED=$(cat ${LOGFILE} | grep -o -P "(?<= \().*(?= .iB\/s\))")
+            SPEED=$(cat ${LOGFILE} | grep -o -P "(?<=.iB, ).*(?=.iB\/s)")
         fi
         DURATION=$((`cat ${LOGFILE} |grep -o -P "(?<=\()[0-9][0-9]:[0-9][0-9]:[0-9][0-9](?=\))"|awk -F':' '{print($1*3600)+($2*60)+$3}'`))
         /usr/bin/curl -s -i -XPOST -u $DBUSER:$DBPASS "$DBPROTO://$DBHOST:$DBPORT/write?db=$DBNAME" --data-binary  "proxmox,host=$HOSTNAME,location=$LOCATIONCODE success=1,duration=$DURATION,speed=$SPEED,size=`stat -c%s $TARFILE`" > /tmp/tst
