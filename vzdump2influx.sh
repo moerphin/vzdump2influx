@@ -4,7 +4,7 @@ TOKEN=<TOKEN>
 ORGANIZATION=<ORGANIZATION>
 LOCATIONCODE=<LOCATIONCODE>
 PROTOCOL=<PROTOCOL> #HTTP or HTTPS
-HOSTNAME=<HOSTNAME>
+DBHOSTNAME=<DBHOSTNAME>
 PORT=<PORT>
 BUCKETNAME=<BUCKETNAME>
 DEBUG=false #Debug mode, copy all logs to /tmp/timestamp
@@ -21,7 +21,7 @@ if [ "$1" == "log-end" ]; then
     fi
     if [ `cat ${LOGFILE} | grep ERROR | wc -l` -gt 0 ]; then
         DURATION=$((`date +%s`-`sed '1q;d' /tmp/backup-info`))
-        /usr/bin/curl --request POST "$PROTOCOL://$HOSTNAME:$PORT/api/v2/write?org=$ORGANIZATION&bucket=$BUCKETNAME&precision=ns" --data-binary  "proxmox,host=$HOSTNAME,location=$LOCATIONCODE success=0,duration=$DURATION,speed=0,size=0" --header "Authorization: Token $TOKEN" --header "Content-Type: text/plain; charset=utf-8" --header "Accept: application/json"
+        /usr/bin/curl --request POST "$PROTOCOL://$DBHOSTNAME:$PORT/api/v2/write?org=$ORGANIZATION&bucket=$BUCKETNAME&precision=ns" --data-binary  "proxmox,host=$HOSTNAME,location=$LOCATIONCODE success=0,duration=$DURATION,speed=0,size=0" --header "Authorization: Token $TOKEN" --header "Content-Type: text/plain; charset=utf-8" --header "Accept: application/json"
         rm /tmp/backup-info
     else
         SPEED=`cat ${LOGFILE} | grep -o -P "(?<=seconds \().*(?= MB\/s| MiB\/s)"`
@@ -30,6 +30,6 @@ if [ "$1" == "log-end" ]; then
         fi
         DURATION=$((`cat ${LOGFILE} |grep -o -P "(?<=\()[0-9][0-9]:[0-9][0-9]:[0-9][0-9](?=\))"|awk -F':' '{print($1*3600)+($2*60)+$3}'`))
         TARFILE=`cat ${LOGFILE} | grep -o -P "creating vzdump archive '\K[^']+"`
-        /usr/bin/curl --request POST "$PROTOCOL://$HOSTNAME:$PORT/api/v2/write?org=$ORGANIZATION&bucket=$BUCKETNAME&precision=ns" --data-binary  "proxmox,host=$HOSTNAME,location=$LOCATIONCODE success=1,duration=$DURATION,speed=$SPEED,size=`stat -c%s $TARFILE`" --header "Authorization: Token $TOKEN" --header "Content-Type: text/plain; charset=utf-8" --header "Accept: application/json"
+        /usr/bin/curl --request POST "$PROTOCOL://$DBHOSTNAME:$PORT/api/v2/write?org=$ORGANIZATION&bucket=$BUCKETNAME&precision=ns" --data-binary  "proxmox,host=$HOSTNAME,location=$LOCATIONCODE success=1,duration=$DURATION,speed=$SPEED,size=`stat -c%s $TARFILE`" --header "Authorization: Token $TOKEN" --header "Content-Type: text/plain; charset=utf-8" --header "Accept: application/json"
     fi
 fi
