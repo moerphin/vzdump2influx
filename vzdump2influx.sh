@@ -29,12 +29,7 @@ if [ "$1" == "log-end" ]; then
             SPEED=`cat ${LOGFILE} | grep -o -P "(?<=.iB, ).*(?=.iB\/s)"`
         fi
         DURATION=$((`cat ${LOGFILE} |grep -o -P "(?<=\()[0-9][0-9]:[0-9][0-9]:[0-9][0-9](?=\))"|awk -F':' '{print($1*3600)+($2*60)+$3}'`))
-<<<<<<< HEAD
         TARFILE=`cat ${LOGFILE} | grep -o -P "creating vzdump archive '\K[^']+"`
         /usr/bin/curl --request POST "$PROTOCOL://$HOSTNAME:$PORT/api/v2/write?org=$ORGANIZATION&bucket=$BUCKETNAME&precision=ns" --data-binary  "proxmox,host=$HOSTNAME,location=$LOCATIONCODE success=1,duration=$DURATION,speed=$SPEED,size=`stat -c%s $TARFILE`" --header "Authorization: Token $TOKEN" --header "Content-Type: text/plain; charset=utf-8" --header "Accept: application/json"
-=======
-        /usr/bin/curl -s -i -XPOST -u $DBUSER:$DBPASS "$DBPROTO://$DBHOST:$DBPORT/write?db=$DBNAME" --data-binary  "proxmox,host=$HOSTNAME,location=$LOCATIONCODE success=1,duration=$DURATION,speed=$SPEED,size=`stat -c%s $TARGET`" > /tmp/tst
-        echo $TARGET >> /tmp/tst
->>>>>>> 3f3d2ca38318b9a001f3b0821db1f6aafbfd7db6
     fi
 fi
