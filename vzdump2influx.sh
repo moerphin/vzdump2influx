@@ -36,13 +36,13 @@ if [ "$1" == "log-end" ]; then
             SPEEDS=$((`cat ${LOGFILE} |grep -o -P "(?<=[0-9] ).(?=iB\/s\))"`))
             case $SPEEDS in
                 K)
-                    SPEED=`echo "$SPEEDR 1024" | awk '{printf "%f", $1 / $2}'`
+                    SPEED=`echo "$SPEEDR 1024" | awk '{printf "%f", $1 * $2}'`
                 ;;
                 M)
-                    SPEED=$SPEEDR
+                    SPEED=`echo "$SPEEDR 1024" | awk '{printf "%f", $1 * $2 * $2}'`
                 ;;
                 G)
-                    SPEED=`echo "$SPEEDR 1024" | awk '{printf "%f", $1 * $2}'`
+                    SPEED=`echo "$SPEEDR 1024" | awk '{printf "%f", $1 * $2 * $2 * $2}'`
                 ;;
             esac
             DURATION=$((`cat ${LOGFILE} |grep -o -P "(?<=\()[0-9][0-9]:[0-9][0-9]:[0-9][0-9](?=\))"|awk -F':' '{print($1*3600)+($2*60)+$3}'`))
