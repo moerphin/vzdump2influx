@@ -1,5 +1,5 @@
 #!/bin/bash
-#Just a simple script to wtite some stats to InfluxDB about your backup. Based on vzdump hook method.
+#Just a simple script to write some stats to InfluxDB about your backup. Based on vzdump hook method.
 TOKEN=<TOKEN>
 ORGANIZATION=<ORGANIZATION>
 LOCATIONCODE=<LOCATIONCODE>
