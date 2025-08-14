@@ -28,13 +28,13 @@ Please don't hesitate, and contact me if you found a bug, or you have any idea f
 3. Customize!
   
   Fill the neccessary datas in the script.
-  - `<DBUSER>` : username for DB
-  - `<DBPASS>` : password for DB
-  - `<DBPROTO>` : protocol for communication with DB server. HTTP or HTTPS
-  - `<DBHOST>` : hostname or ip for your DB
-  - `<DBPORT>` : HTTP API port (default: 8086)
-  - `<DBNAME>` : name of your DB
-  - `<LOCATION_CODE>` : put your location here. I have multiple DCs, so I have different location for each.
+  - `<TOKEN>` : token for DB
+  - `<ORGANIZATION>` : organization for DB
+  - `<PROTOCOL>` : protocol for communication with DB server. HTTP or HTTPS
+  - `<DBHOSTNAME>` : hostname or ip for your DB
+  - `<PORT>` : HTTP API port (default: 8086)
+  - `<BUCKETNAME>` : name of your bucket
+  - `<LOCATIONCODE>` : put your location here. I have multiple DCs, so I have different location for each.
   - `DEBUG` : true or false. If the value is true, the script copies all logs to /tmp/timestamp (and does not delete it)
 
 4. Add the hook to the backup job.
