@@ -16,6 +16,9 @@ if [ "$1" == "backup-start" ]; then
 fi
 
 if [ "$1" == "log-end" ]; then
+    if [ -z ${LOGFILE} ]; then
+        LOGFILE=/var/log/vzdump/${VMTYPE}-`echo ${TARGET} | awk -F'/' '{print $2}'`.log
+    fi
     if [ "$DEBUG" = true ]; then
         cp ${LOGFILE} /tmp/`date +%s`
     fi
@@ -29,11 +32,11 @@ if [ "$1" == "log-end" ]; then
             if [ -z $SPEED ]; then
                 SPEED=`cat ${LOGFILE} | grep -o -P "(?<=.iB, ).*(?=.iB\/s)"`
             fi
-            DURATION=$((`cat ${LOGFILE} |grep -o -P "(?<=\()[0-9][0-9]:[0-9][0-9]:[0-9][0-9](?=\))"|awk -F':' '{print($1*3600)+($2*60)+$3}'`))
+            DURATION=$((`cat ${LOGFILE} | grep -o -P "(?<=\()[0-9][0-9]:[0-9][0-9]:[0-9][0-9](?=\))"|awk -F':' '{print($1*3600)+($2*60)+$3}'`))
             /usr/bin/curl --request POST "$PROTOCOL://$DBHOSTNAME:$PORT/api/v2/write?org=$ORGANIZATION&bucket=$BUCKETNAME&precision=ns" --data-binary  "proxmox,host=$HOSTNAME,location=$LOCATIONCODE success=1,duration=$DURATION,speed=$SPEED,size=`stat -c%s $TARGET`" --header "Authorization: Token $TOKEN" --header "Content-Type: text/plain; charset=utf-8" --header "Accept: application/json"
         else
-            SPEEDR=$((`cat ${LOGFILE} |grep -o -P "(?<=\().*(?=....\/s\))"`))
-            SPEEDS=$((`cat ${LOGFILE} |grep -o -P "(?<=[0-9] ).(?=iB\/s\))"`))
+            SPEEDR=$(cat ${LOGFILE} | grep -o -P "(?<=\().*(?=....\/s\))")
+            SPEEDS=$(cat ${LOGFILE} | grep -o -P "(?<=[0-9] ).(?=iB\/s\))")
             case $SPEEDS in
                 K)
                     SPEED=`echo "$SPEEDR 1024" | awk '{printf "%f", $1 / $2}'`
@@ -46,8 +49,8 @@ if [ "$1" == "log-end" ]; then
                 ;;
             esac
             DURATION=$((`cat ${LOGFILE} |grep -o -P "(?<=\()[0-9][0-9]:[0-9][0-9]:[0-9][0-9](?=\))"|awk -F':' '{print($1*3600)+($2*60)+$3}'`))
-            SIZER=$((`cat ${LOGFILE} |grep -o -P "(?<=transferred ).*(?= [K|M|G]iB in )"`))
-            SIZES=$((`cat ${LOGFILE} |grep -o -P "(?<=[0-9 ]).(?=iB in [0-9])"`))
+            SIZER=$(cat ${LOGFILE} |grep -o -P "(?<=transferred ).*(?= [K|M|G]iB in )")
+            SIZES=$(cat ${LOGFILE} |grep -o -P "(?<=[0-9 ]).(?=iB in [0-9])")
             case $SIZES in
                 K)
                     SIZE=`echo "$SIZER 1024" | awk '{printf "%f", $1 * $2}'`
